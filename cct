@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+"""
+Cookie Confusion Toolkit (CCT) entry point script.
+"""
+import sys
+import os
+
+# Add the src directory to the Python path
+script_dir = os.path.dirname(os.path.abspath(__file__))
+src_dir = os.path.join(script_dir, "src")
+sys.path.insert(0, script_dir)
+
+from src.cli import main
+
+if __name__ == "__main__":
+    main()

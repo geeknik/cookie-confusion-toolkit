@@ -1,0 +1,48 @@
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+ Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+
+                            Preamble
+
+  The GNU General Public License is a free, copyleft license for
+software and other kinds of works.
+
+[... standard GPLv3 license text ...]
+
+                    ETHICAL USE AMENDMENT
+
+In addition to the terms and conditions of the GNU General Public License
+Version 3, use of this software is subject to the following additional conditions:
+
+1. This software must not be used for illegal, harmful, or exploitative purposes.
+   Specifically, this software:
+
+   a) May only be used against systems that you own or for which you have
+      obtained explicit written permission to test.
+      
+   b) Must be used in accordance with applicable laws and regulations.
+   
+   c) Must be used with respect for individual privacy and data protection rights.
+   
+   d) Must not be used in a way that intentionally causes harm, disruption,
+      or unauthorized access to systems.
+
+2. If vulnerabilities are discovered using this software, they must be disclosed
+   responsibly to the affected parties, allowing reasonable time for remediation
+   before public disclosure.
+
+3. Knowledge gained through the use of this software should be shared to improve
+   the security of systems generally, where doing so does not create unreasonable
+   risk.
+
+4. This software may be used for legitimate security research, education, and
+   system hardening purposes.
+
+Use of this software constitutes acceptance of these conditions. If you do not
+or cannot agree to these conditions, you may not use this software.
+
+This amendment is intended to promote ethical use of security research tools
+while still preserving the freedoms fundamental to open source software.
