@@ -66,8 +66,8 @@ git clone https://github.com/geeknik/cookie-confusion-toolkit.git
 cd cookie-confusion-toolkit
 pip install -e .
 
-# Run a basic test
-python -m cct.test --target example.com
+# Check out the help and hack the planet!
+cct --help
 ```
 
 ## 👥 Contributing
