@@ -1,12 +1,12 @@
 """
 Unit tests for the CookieBomb module.
 """
-
 import json
 from unittest.mock import MagicMock, patch
 
 import pytest
-from src.cookiebomb import CookieBomb
+
+from src.cookie_confusion_toolkit.cookiebomb import CookieBomb
 
 
 class TestCookieBombInitialization:
@@ -14,7 +14,9 @@ class TestCookieBombInitialization:
 
     def test_init_valid_target(self, temp_dir, auth_file):
         """Test initialization with valid target."""
-        cookiebomb = CookieBomb(target="http://localhost", output_dir=temp_dir, auth_file=auth_file)
+        cookiebomb = CookieBomb(
+            target="http://localhost", output_dir=temp_dir, auth_file=auth_file
+        )
 
         assert cookiebomb.target == "http://localhost"
         assert cookiebomb.output_dir == temp_dir
@@ -29,7 +31,9 @@ class TestCookieBombInitialization:
     def test_init_unauthorized_target(self, temp_dir, auth_file):
         """Test initialization with unauthorized target."""
         with pytest.raises(ValueError, match="Not authorized to test"):
-            CookieBomb(target="http://unauthorized.com", output_dir=temp_dir, auth_file=auth_file)
+            CookieBomb(
+                target="http://unauthorized.com", output_dir=temp_dir, auth_file=auth_file
+            )
 
     def test_init_with_verbose(self, temp_dir, auth_file):
         """Test initialization with verbose mode."""
@@ -46,7 +50,7 @@ class TestCookieBombInitialization:
 class TestKeyCollisions:
     """Test key collision testing functionality."""
 
-    @patch("src.cookiebomb.safe_request")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.safe_request")
     def test_key_collisions_basic(self, mock_request, temp_dir, auth_file):
         """Test basic key collision testing."""
         # Setup mock response
@@ -68,7 +72,7 @@ class TestKeyCollisions:
         # Verify that requests were made
         assert mock_request.call_count == 3
 
-    @patch("src.cookiebomb.safe_request")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.safe_request")
     def test_key_collisions_with_custom_variations(self, mock_request, temp_dir, auth_file):
         """Test key collision with custom variations."""
         mock_response = MagicMock()
@@ -79,14 +83,17 @@ class TestKeyCollisions:
 
         cookiebomb = CookieBomb("http://localhost", temp_dir, auth_file)
 
-        variations = [{"name": "test", "value": "value1"}, {"name": "Test", "value": "value2"}]
+        variations = [
+            {"name": "test", "value": "value1"},
+            {"name": "Test", "value": "value2"},
+        ]
 
         results = cookiebomb.test_key_collisions(["test"], variations)
 
         assert len(results["results"]) == 2
         assert results["variations"] == variations
 
-    @patch("src.cookiebomb.safe_request")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.safe_request")
     def test_key_collisions_failed_request(self, mock_request, temp_dir, auth_file):
         """Test key collision when request fails."""
         mock_request.return_value = None
@@ -102,7 +109,7 @@ class TestKeyCollisions:
 class TestOverlongValues:
     """Test overlong value testing functionality."""
 
-    @patch("src.cookiebomb.safe_request")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.safe_request")
     def test_overlong_values_basic(self, mock_request, temp_dir, auth_file):
         """Test basic overlong value testing."""
         mock_response = MagicMock()
@@ -126,7 +133,7 @@ class TestOverlongValues:
                 assert result["truncated"] is True
                 assert result["truncated_length"] == len("truncated")
 
-    @patch("src.cookiebomb.safe_request")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.safe_request")
     def test_overlong_values_no_truncation(self, mock_request, temp_dir, auth_file):
         """Test when no truncation occurs."""
 
@@ -135,7 +142,9 @@ class TestOverlongValues:
             mock_response.status_code = 200
             # Extract the cookie value from headers
             cookie_value = (
-                headers["Cookie"].split("=")[1] if headers and "Cookie" in headers else ""
+                headers["Cookie"].split("=")[1]
+                if headers and "Cookie" in headers
+                else ""
             )
             mock_response.cookies.get_dict.return_value = {"session": cookie_value}
             mock_response.headers = {}
@@ -154,7 +163,7 @@ class TestOverlongValues:
 class TestPathScoping:
     """Test path scoping functionality."""
 
-    @patch("src.cookiebomb.safe_request")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.safe_request")
     def test_path_scoping_basic(self, mock_request, temp_dir, auth_file):
         """Test basic path scoping."""
         mock_response = MagicMock()
@@ -175,7 +184,7 @@ class TestPathScoping:
         # Check that requests were made for each path and additional test paths
         assert len(results["path_results"]) >= len(paths)
 
-    @patch("src.cookiebomb.safe_request")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.safe_request")
     def test_path_scoping_with_encoded_paths(self, mock_request, temp_dir, auth_file):
         """Test path scoping with encoded paths."""
         mock_response = MagicMock()
@@ -198,7 +207,7 @@ class TestPathScoping:
 class TestWhitespaceAmbiguity:
     """Test whitespace ambiguity testing."""
 
-    @patch("src.cookiebomb.safe_request")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.safe_request")
     def test_whitespace_ambiguity_basic(self, mock_request, temp_dir, auth_file):
         """Test basic whitespace ambiguity testing."""
         mock_response = MagicMock()
@@ -225,8 +234,8 @@ class TestWhitespaceAmbiguity:
 class TestRunAllTests:
     """Test running all tests."""
 
-    @patch("src.cookiebomb.safe_request")
-    @patch("src.cookiebomb.save_results")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.safe_request")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.save_results")
     def test_run_all_tests(self, mock_save, mock_request, temp_dir, auth_file):
         """Test running all tests."""
         mock_response = MagicMock()
@@ -252,7 +261,7 @@ class TestRunAllTests:
         assert save_call_args[0] == results  # Results were saved
         assert temp_dir in save_call_args[1]  # Saved to correct directory
 
-    @patch("src.cookiebomb.safe_request")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.safe_request")
     def test_run_all_tests_exception(self, mock_request, temp_dir, auth_file):
         """Test handling of exceptions during run_all_tests."""
         mock_request.side_effect = Exception("Network error")
@@ -268,7 +277,7 @@ class TestRunAllTests:
 class TestCustomTest:
     """Test custom test generation."""
 
-    @patch("src.cookiebomb.safe_request")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.safe_request")
     def test_custom_malformed_cookie(self, mock_request, temp_dir, auth_file):
         """Test custom malformed cookie test."""
         mock_response = MagicMock()
@@ -292,7 +301,7 @@ class TestCustomTest:
         assert results["params"] == params
         assert "session=test;;;" in results["results"]["sent_cookie"]
 
-    @patch("src.cookiebomb.safe_request")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.safe_request")
     def test_custom_multiple_cookies(self, mock_request, temp_dir, auth_file):
         """Test custom multiple cookies test."""
         mock_response = MagicMock()
@@ -309,5 +318,6 @@ class TestCustomTest:
 
         assert results["results"]["sent_cookies"] == params["cookies"]
         assert (
-            "session=value1; Session=value2; SESSION=value3" == results["results"]["cookie_header"]
+            "session=value1; Session=value2; SESSION=value3"
+            == results["results"]["cookie_header"]
         )

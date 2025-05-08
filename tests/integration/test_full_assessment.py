@@ -1,10 +1,8 @@
 """
 Integration tests for the full assessment module.
 """
-
 import json
 import os
-import tempfile
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -15,10 +13,10 @@ from examples.scripts.full_assessment import run_full_assessment
 class TestFullAssessmentIntegration:
     """Integration tests for the full assessment script."""
 
-    @patch("src.cookiebomb.CookieBomb")
-    @patch("src.clientfork.ClientFork")
-    @patch("src.serverdrift.ServerDrift")
-    @patch("src.bypassgen.BypassGen")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.CookieBomb")
+    @patch("src.cookie_confusion_toolkit.clientfork.ClientFork")
+    @patch("src.cookie_confusion_toolkit.serverdrift.ServerDrift")
+    @patch("src.cookie_confusion_toolkit.bypassgen.BypassGen")
     def test_full_assessment_basic(
         self,
         mock_bypassgen,
@@ -61,7 +59,10 @@ class TestFullAssessmentIntegration:
 
         # Run assessment
         results = run_full_assessment(
-            target="http://localhost", output_dir=temp_dir, auth_file=auth_file, verbose=True
+            target="http://localhost",
+            output_dir=temp_dir,
+            auth_file=auth_file,
+            verbose=True,
         )
 
         # Verify results
@@ -83,7 +84,7 @@ class TestFullAssessmentIntegration:
         mock_serverdrift_instance.run_all_tests.assert_called_once()
         mock_bypassgen_instance.run_all_tests.assert_called_once()
 
-    @patch("src.cookiebomb.CookieBomb")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.CookieBomb")
     @patch("json.dump")
     def test_full_assessment_saves_results(
         self, mock_json_dump, mock_cookiebomb, temp_dir, auth_file
@@ -96,13 +97,19 @@ class TestFullAssessmentIntegration:
         mock_cookiebomb.return_value = mock_cookiebomb_instance
 
         # Mock other components to return None (minimal test)
-        with patch("src.clientfork.ClientFork", return_value=None):
-            with patch("src.serverdrift.ServerDrift", return_value=None):
-                with patch("src.bypassgen.BypassGen", return_value=None):
+        with patch("src.cookie_confusion_toolkit.clientfork.ClientFork", return_value=None):
+            with patch(
+                "src.cookie_confusion_toolkit.serverdrift.ServerDrift", return_value=None
+            ):
+                with patch(
+                    "src.cookie_confusion_toolkit.bypassgen.BypassGen", return_value=None
+                ):
 
                     # Run assessment
                     results = run_full_assessment(
-                        target="http://localhost", output_dir=temp_dir, auth_file=auth_file
+                        target="http://localhost",
+                        output_dir=temp_dir,
+                        auth_file=auth_file,
                     )
 
                     # Verify results were saved
@@ -111,7 +118,7 @@ class TestFullAssessmentIntegration:
                     assert save_call[0][0] == results  # First arg should be results
                     assert temp_dir in save_call[0][1].name  # Should save to temp_dir
 
-    @patch("src.cookiebomb.CookieBomb")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.CookieBomb")
     def test_full_assessment_error_handling(self, mock_cookiebomb, temp_dir, auth_file):
         """Test error handling in full assessment."""
 
@@ -127,8 +134,8 @@ class TestFullAssessmentIntegration:
         assert "error" in results
         assert "Test error" in results["error"]
 
-    @patch("src.cookiebomb.CookieBomb")
-    @patch("src.clientfork.ClientFork")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.CookieBomb")
+    @patch("src.cookie_confusion_toolkit.clientfork.ClientFork")
     def test_full_assessment_with_options(
         self, mock_clientfork, mock_cookiebomb, temp_dir, auth_file
     ):
@@ -196,7 +203,7 @@ class TestCLIIntegration:
         )
 
     @patch("argparse.ArgumentParser.parse_args")
-    @patch("src.cookiebomb.CookieBomb")
+    @patch("src.cookie_confusion_toolkit.cookiebomb.CookieBomb")
     def test_cli_cookiebomb_command(self, mock_cookiebomb, mock_parse_args):
         """Test CLI cookiebomb command execution."""
 
@@ -215,7 +222,7 @@ class TestCLIIntegration:
         mock_cookiebomb.return_value = mock_instance
 
         # Import and run main
-        from src.cli import main
+        from src.cookie_confusion_toolkit.cli import main
 
         # Run CLI
         with patch("sys.argv", ["cct", "cookiebomb", "http://localhost"]):
@@ -234,7 +241,7 @@ class TestEndToEndScenarios:
     """End-to-end integration test scenarios."""
 
     @pytest.mark.slow
-    @patch("src.utils.common.requests.request")
+    @patch("src.cookie_confusion_toolkit.utils.common.requests.request")
     def test_e2e_assessment_localhost(self, mock_request, temp_dir):
         """End-to-end test against localhost."""
 
@@ -250,7 +257,7 @@ class TestEndToEndScenarios:
         }
 
         auth_file = os.path.join(temp_dir, "auth.json")
-        with open(auth_file, "w") as f:
+        with open(auth_file, "w", encoding="utf-8") as f:
             json.dump(auth_config, f)
 
         # Mock HTTP responses
@@ -268,7 +275,10 @@ class TestEndToEndScenarios:
         from examples.scripts.full_assessment import run_full_assessment
 
         results = run_full_assessment(
-            target="http://localhost", output_dir=temp_dir, auth_file=auth_file, verbose=True
+            target="http://localhost",
+            output_dir=temp_dir,
+            auth_file=auth_file,
+            verbose=True,
         )
 
         # Verify results structure
@@ -297,13 +307,13 @@ class TestEndToEndScenarios:
         }
 
         auth_file = os.path.join(temp_dir, "auth.json")
-        with open(auth_file, "w") as f:
+        with open(auth_file, "w", encoding="utf-8") as f:
             json.dump(auth_config, f)
 
         # Skip if docker is not available
         try:
             subprocess.run(["docker", "--version"], check=True, capture_output=True)
-        except:
+        except Exception:
             pytest.skip("Docker not available")
 
         # Build and run Docker container
@@ -329,7 +339,12 @@ class TestReportGeneration:
         results = {
             "target": "http://localhost",
             "timestamp": 1234567890,
-            "summary": {"total_tests": 10, "passed": 8, "failed": 2, "issues_found": 3},
+            "summary": {
+                "total_tests": 10,
+                "passed": 8,
+                "failed": 2,
+                "issues_found": 3,
+            },
             "tests": {
                 "key_collisions": {"status": "completed", "issues": []},
                 "path_scoping": {
@@ -343,11 +358,11 @@ class TestReportGeneration:
 
         # Save results to file
         results_file = os.path.join(temp_dir, "results.json")
-        with open(results_file, "w") as f:
+        with open(results_file, "w", encoding="utf-8") as f:
             json.dump(results, f)
 
         # Import and test report generation
-        from src.utils.common import generate_html_report
+        from src.cookie_confusion_toolkit.utils.common import generate_html_report
 
         html_file = os.path.join(temp_dir, "report.html")
         generate_html_report(results_file, html_file)
@@ -356,7 +371,7 @@ class TestReportGeneration:
         assert os.path.exists(html_file)
 
         # Basic content verification
-        with open(html_file, "r") as f:
+        with open(html_file, "r", encoding="utf-8") as f:
             html_content = f.read()
             assert "Cookie Confusion Assessment Report" in html_content
             assert "http://localhost" in html_content
@@ -371,14 +386,14 @@ class TestReportGeneration:
             "tests": {},
         }
 
-        from src.utils.common import generate_markdown_report
+        from src.cookie_confusion_toolkit.utils.common import generate_markdown_report
 
         md_file = os.path.join(temp_dir, "report.md")
         generate_markdown_report(results, md_file)
 
         assert os.path.exists(md_file)
 
-        with open(md_file, "r") as f:
+        with open(md_file, "r", encoding="utf-8") as f:
             content = f.read()
             assert "# Cookie Confusion Assessment Report" in content
             assert "https://example.com" in content

@@ -1,13 +1,13 @@
 """
 Unit tests for common utilities.
 """
-
 import json
 import os
 from unittest.mock import MagicMock, mock_open, patch
 
 import pytest
-from src.utils.common import (
+
+from src.cookie_confusion_toolkit.utils.common import (
     calculate_checksum,
     ethical_check,
     generate_random_string,
@@ -115,7 +115,7 @@ class TestStringFunctions:
 class TestHTTPFunctions:
     """Test HTTP-related functions."""
 
-    @patch("src.utils.common.requests.request")
+    @patch("src.cookie_confusion_toolkit.utils.common.requests.request")
     def test_safe_request_success(self, mock_request):
         """Test successful HTTP request."""
         mock_response = MagicMock()
@@ -131,7 +131,7 @@ class TestHTTPFunctions:
         assert call_args[1]["url"] == "http://localhost/test"
         assert call_args[1]["method"] == "GET"
 
-    @patch("src.utils.common.requests.request")
+    @patch("src.cookie_confusion_toolkit.utils.common.requests.request")
     def test_safe_request_failure(self, mock_request):
         """Test failed HTTP request."""
         mock_request.side_effect = Exception("Connection error")
@@ -139,7 +139,7 @@ class TestHTTPFunctions:
         response = safe_request("http://localhost/test")
         assert response is None
 
-    @patch("src.utils.common.requests.request")
+    @patch("src.cookie_confusion_toolkit.utils.common.requests.request")
     def test_safe_request_with_options(self, mock_request):
         """Test HTTP request with various options."""
         mock_response = MagicMock()
