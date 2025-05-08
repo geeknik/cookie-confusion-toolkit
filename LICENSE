@@ -1,32 +1,36 @@
-                    GNU GENERAL PUBLIC LICENSE
-                       Version 3, 29 June 2007
+MIT License
 
- Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
- Everyone is permitted to copy and distribute verbatim copies
- of this license document, but changing it is not allowed.
+Copyright (c) 2025 geeknik
 
-                            Preamble
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-  The GNU General Public License is a free, copyleft license for
-software and other kinds of works.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-[... standard GPLv3 license text ...]
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
                     ETHICAL USE AMENDMENT
 
-In addition to the terms and conditions of the GNU General Public License
-Version 3, use of this software is subject to the following additional conditions:
+In addition to the terms and conditions of the MIT License, use of this software
+is subject to the following additional conditions:
 
 1. This software must not be used for illegal, harmful, or exploitative purposes.
    Specifically, this software:
-
    a) May only be used against systems that you own or for which you have
       obtained explicit written permission to test.
-      
    b) Must be used in accordance with applicable laws and regulations.
-   
    c) Must be used with respect for individual privacy and data protection rights.
-   
    d) Must not be used in a way that intentionally causes harm, disruption,
       or unauthorized access to systems.
 
