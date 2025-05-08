@@ -1,6 +1,7 @@
 """
 Integration tests for the full assessment module.
 """
+
 import json
 import os
 from unittest.mock import MagicMock, patch
@@ -98,12 +99,8 @@ class TestFullAssessmentIntegration:
 
         # Mock other components to return None (minimal test)
         with patch("src.cookie_confusion_toolkit.clientfork.ClientFork", return_value=None):
-            with patch(
-                "src.cookie_confusion_toolkit.serverdrift.ServerDrift", return_value=None
-            ):
-                with patch(
-                    "src.cookie_confusion_toolkit.bypassgen.BypassGen", return_value=None
-                ):
+            with patch("src.cookie_confusion_toolkit.serverdrift.ServerDrift", return_value=None):
+                with patch("src.cookie_confusion_toolkit.bypassgen.BypassGen", return_value=None):
 
                     # Run assessment
                     results = run_full_assessment(

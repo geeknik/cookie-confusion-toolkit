@@ -1,6 +1,7 @@
 """
 Unit tests for common utilities.
 """
+
 import json
 import os
 from unittest.mock import MagicMock, mock_open, patch

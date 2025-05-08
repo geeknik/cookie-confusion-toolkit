@@ -1,6 +1,7 @@
 """
 Unit tests for the CookieBomb module.
 """
+
 import json
 from unittest.mock import MagicMock, patch
 
@@ -14,9 +15,7 @@ class TestCookieBombInitialization:
 
     def test_init_valid_target(self, temp_dir, auth_file):
         """Test initialization with valid target."""
-        cookiebomb = CookieBomb(
-            target="http://localhost", output_dir=temp_dir, auth_file=auth_file
-        )
+        cookiebomb = CookieBomb(target="http://localhost", output_dir=temp_dir, auth_file=auth_file)
 
         assert cookiebomb.target == "http://localhost"
         assert cookiebomb.output_dir == temp_dir
@@ -31,9 +30,7 @@ class TestCookieBombInitialization:
     def test_init_unauthorized_target(self, temp_dir, auth_file):
         """Test initialization with unauthorized target."""
         with pytest.raises(ValueError, match="Not authorized to test"):
-            CookieBomb(
-                target="http://unauthorized.com", output_dir=temp_dir, auth_file=auth_file
-            )
+            CookieBomb(target="http://unauthorized.com", output_dir=temp_dir, auth_file=auth_file)
 
     def test_init_with_verbose(self, temp_dir, auth_file):
         """Test initialization with verbose mode."""
@@ -142,9 +139,7 @@ class TestOverlongValues:
             mock_response.status_code = 200
             # Extract the cookie value from headers
             cookie_value = (
-                headers["Cookie"].split("=")[1]
-                if headers and "Cookie" in headers
-                else ""
+                headers["Cookie"].split("=")[1] if headers and "Cookie" in headers else ""
             )
             mock_response.cookies.get_dict.return_value = {"session": cookie_value}
             mock_response.headers = {}
@@ -318,6 +313,5 @@ class TestCustomTest:
 
         assert results["results"]["sent_cookies"] == params["cookies"]
         assert (
-            "session=value1; Session=value2; SESSION=value3"
-            == results["results"]["cookie_header"]
+            "session=value1; Session=value2; SESSION=value3" == results["results"]["cookie_header"]
         )

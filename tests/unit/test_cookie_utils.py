@@ -1,6 +1,7 @@
 """
 Unit tests for cookie utilities.
 """
+
 import time
 from unittest.mock import MagicMock
 
@@ -145,9 +146,7 @@ class TestMalformedCookies:
 
     def test_duplicate_name(self):
         """Test creating cookies with duplicate names."""
-        cookie = create_malformed_cookie(
-            "session", "value1", "duplicate_name", new_value="value2"
-        )
+        cookie = create_malformed_cookie("session", "value1", "duplicate_name", new_value="value2")
 
         assert "session=value1; session=value2" == cookie
 
@@ -239,9 +238,7 @@ class TestBrowserCookieJar:
         ]
 
         # Test path matching
-        result = simulate_browser_cookie_jar(
-            cookies, "chrome", "https://example.com/admin/page"
-        )
+        result = simulate_browser_cookie_jar(cookies, "chrome", "https://example.com/admin/page")
 
         # Should include both session and admin cookies
         assert len(result) == 4
@@ -257,9 +254,7 @@ class TestBrowserCookieJar:
         ]
 
         # Request to /api should include public and api, but not admin
-        result = simulate_browser_cookie_jar(
-            cookies, "chrome", "https://example.com/api/endpoint"
-        )
+        result = simulate_browser_cookie_jar(cookies, "chrome", "https://example.com/api/endpoint")
 
         cookie_names = [c.name for c in result]
         assert "public" in cookie_names
