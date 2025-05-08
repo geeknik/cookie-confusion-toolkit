@@ -32,14 +32,6 @@ pip install -e .
 
 This will install the package and its dependencies while allowing you to modify the code.
 
-## Installing from PyPI
-
-The package can also be installed directly from PyPI:
-
-```bash
-pip install cookie-confusion-toolkit
-```
-
 ## Dependencies
 
 The toolkit requires several dependencies that will be automatically installed:
