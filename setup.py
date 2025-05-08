@@ -1,8 +1,10 @@
 """
 Setup script for the Cookie Confusion Toolkit.
 """
-from setuptools import setup, find_packages
+
 import os
+
+from setuptools import find_packages, setup
 
 
 def read(fname):
@@ -31,12 +33,7 @@ setup(
     url="https://github.com/geeknik/cookie-confusion-toolkit",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    package_data={
-        "cookie_confusion_toolkit": [
-            "templates/*",
-            "config/*"
-        ]
-    },
+    package_data={"cookie_confusion_toolkit": ["templates/*", "config/*"]},
     include_package_data=True,
     install_requires=[
         "requests>=2.31.0",

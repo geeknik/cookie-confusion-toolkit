@@ -2,8 +2,8 @@
 """
 Cookie Confusion Toolkit (CCT) entry point script.
 """
-import sys
 import os
+import sys
 
 # Add the src directory to the Python path
 script_dir = os.path.dirname(os.path.abspath(__file__))

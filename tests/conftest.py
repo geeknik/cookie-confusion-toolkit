@@ -1,12 +1,14 @@
 """
 Test configuration and fixtures for the Cookie Confusion Toolkit.
 """
-import pytest
-import tempfile
-import shutil
+
 import json
-from pathlib import Path
 import os
+import shutil
+import tempfile
+from pathlib import Path
+
+import pytest
 
 
 @pytest.fixture
@@ -21,27 +23,19 @@ def temp_dir():
 def auth_file(temp_dir):
     """Create a temporary auth file for testing."""
     auth_config = {
-        "authorized_targets": [
-            "localhost",
-            "127.0.0.1",
-            "example.test",
-            "testserver.local"
-        ],
-        "excluded_paths": [
-            "/admin",
-            "/internal"
-        ],
+        "authorized_targets": ["localhost", "127.0.0.1", "example.test", "testserver.local"],
+        "excluded_paths": ["/admin", "/internal"],
         "authorization_details": {
             "contact": "test@example.com",
             "document_reference": "Test authorization",
-            "expiration": "2100-01-01"
-        }
+            "expiration": "2100-01-01",
+        },
     }
-    
+
     auth_path = os.path.join(temp_dir, "auth.json")
-    with open(auth_path, 'w') as f:
+    with open(auth_path, "w") as f:
         json.dump(auth_config, f)
-    
+
     return auth_path
 
 
@@ -57,7 +51,7 @@ def sample_cookies():
     return {
         "session": "test_session_value",
         "csrf_token": "test_csrf_token",
-        "user_prefs": "theme=dark;lang=en"
+        "user_prefs": "theme=dark;lang=en",
     }
 
 
@@ -73,6 +67,7 @@ def results_dir(temp_dir):
 def setup_logging():
     """Configure logging for tests."""
     import logging
+
     logging.basicConfig(level=logging.DEBUG)
     yield
     # Reset logging after tests
