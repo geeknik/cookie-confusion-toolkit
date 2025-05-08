@@ -52,7 +52,7 @@ This toolkit is based on extensive research into cookie parsing inconsistencies 
 
 ## 📋 Requirements
 
-- Python 3.9+
+- Python 3.10+
 - Requests
 - Selenium WebDriver
 - BeautifulSoup
@@ -61,10 +61,7 @@ This toolkit is based on extensive research into cookie parsing inconsistencies 
 ## 🚀 Quick Start
 
 ```bash
-# Install from pip
-pip install cookie-confusion-toolkit
-
-# Or clone and install
+# Clone and install
 git clone https://github.com/geeknik/cookie-confusion-toolkit.git
 cd cookie-confusion-toolkit
 pip install -e .
