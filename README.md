@@ -76,4 +76,4 @@ Contributions that improve the toolkit's ability to identify security issues for
 
 ## 📜 License
 
-GPLv3 with Ethical Use Clause - See [LICENSE](LICENSE) for details.
+MIT with Ethical Use Clause - See [LICENSE](LICENSE) for details.
