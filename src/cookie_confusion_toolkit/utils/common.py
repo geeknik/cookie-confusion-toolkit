@@ -286,7 +286,7 @@ def validate_authorization(target: str, auth_file: Optional[str] = None) -> bool
     
     Args:
         target: The target URL
-        auth_file: Path to authorization file
+        auth_file: Path to authorization file (optional)
         
     Returns:
         bool: True if testing is authorized, False otherwise
@@ -296,7 +296,7 @@ def validate_authorization(target: str, auth_file: Optional[str] = None) -> bool
         auth_file = os.environ.get("CCT_AUTH_FILE")
     
     if not auth_file or not os.path.exists(auth_file):
-        logger.warning("No authorization file provided, falling back to basic checks")
+        # Authorization file is optional for basic operations
         return ethical_check(target)
     
     try:

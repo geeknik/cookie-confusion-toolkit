@@ -67,7 +67,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--version", action="version", version=f"CCT v{__version__}")
     parser.add_argument("--log-file", help="Log file path")
     parser.add_argument("--output-dir", default="./results", help="Output directory for results")
-    parser.add_argument("--auth-file", help="Authentication file path")
+    parser.add_argument("--auth-file", help="Optional authentication file path (only needed for advanced features)")
     parser.add_argument("--rate-limit", type=float, default=1.0, 
                         help="Rate limit delay between requests in seconds")
     
