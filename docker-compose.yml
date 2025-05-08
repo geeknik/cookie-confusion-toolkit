@@ -1,86 +1,24 @@
 version: '3.8'
 
 services:
-  cct:
+  cookie-confusion-toolkit:
     build: .
-    container_name: cookie-confusion-toolkit
-    
-    # Volume mounts for persistent storage
+    environment:
+      - DISPLAY=:99
     volumes:
       - ./results:/app/results
-      - ./logs:/app/logs
-      - ./examples:/app/examples:ro
-      - ./docs:/app/docs:ro
+      - ./auth.json:/app/auth.json
+    command: ["full", "https://example.com", "--verbose"]
     
-    # Environment variables
+  # Alternative service for interactive use
+  cct-interactive:
+    build: .
+    stdin_open: true
+    tty: true
     environment:
-      - PYTHONPATH=/app
       - DISPLAY=:99
-      - LOG_LEVEL=INFO
-    
-    # Network configuration
-    network_mode: "host"  # Use host network for testing real targets
-    
-    # Security settings
-    security_opt:
-      - no-new-privileges:true
-    
-    # Resource limits
-    mem_limit: 2g
-    cpus: '1.0'
-    
-    # Default command
-    command: python -m src.cli --help
-
-  # Optional: Selenium Grid Hub for distributed testing
-  selenium-hub:
-    image: selenium/hub:4.0.0
-    container_name: selenium-hub
-    ports:
-      - "4444:4444"
-    environment:
-      - GRID_MAX_SESSION=5
-      - GRID_BROWSER_TIMEOUT=60
-      - GRID_TIMEOUT=60
-
-  # Chrome node
-  chrome:
-    image: selenium/node-chrome:4.0.0
-    shm_size: 2gb
-    depends_on:
-      - selenium-hub
-    environment:
-      - HUB_HOST=selenium-hub
-      - SE_EVENT_BUS_HOST=selenium-hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-
-  # Firefox node
-  firefox:
-    image: selenium/node-firefox:4.0.0
-    shm_size: 2gb
-    depends_on:
-      - selenium-hub
-    environment:
-      - HUB_HOST=selenium-hub
-      - SE_EVENT_BUS_HOST=selenium-hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-
-  # Edge node
-  edge:
-    image: selenium/node-edge:4.0.0
-    shm_size: 2gb
-    depends_on:
-      - selenium-hub
-    environment:
-      - HUB_HOST=selenium-hub
-      - SE_EVENT_BUS_HOST=selenium-hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-
-# Define a custom network
-networks:
-  default:
-    driver: bridge
-    name: cct-network
+    volumes:
+      - ./results:/app/results
+      - ./auth.json:/app/auth.json
+      - ./examples:/app/examples
+    entrypoint: ["/usr/local/bin/start-xvfb.sh", "bash"]

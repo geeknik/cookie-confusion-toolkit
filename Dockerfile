@@ -22,61 +22,50 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add
     && rm -rf /var/lib/apt/lists/*
 
 # Install ChromeDriver
-RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | awk -F. '{print $1}') \
-    && wget -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION/chromedriver_linux64.zip" \
+ARG CHROME_DRIVER_VERSION=119.0.6045.105
+RUN wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip \
     && unzip /tmp/chromedriver.zip -d /usr/local/bin/ \
     && rm /tmp/chromedriver.zip \
     && chmod +x /usr/local/bin/chromedriver
 
-# Install GeckoDriver for Firefox
-RUN GECKODRIVER_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep tag_name | cut -d '"' -f 4) \
-    && wget -O /tmp/geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/$GECKODRIVER_VERSION/geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz" \
+# Install geckodriver for Firefox
+ARG GECKO_DRIVER_VERSION=0.33.0
+RUN wget -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v${GECKO_DRIVER_VERSION}/geckodriver-v${GECKO_DRIVER_VERSION}-linux64.tar.gz \
     && tar -xzf /tmp/geckodriver.tar.gz -C /usr/local/bin/ \
     && rm /tmp/geckodriver.tar.gz \
     && chmod +x /usr/local/bin/geckodriver
 
-# Set up working directory
+# Set working directory
 WORKDIR /app
 
-# Copy requirements file
+# Copy requirements
 COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the toolkit source code
-COPY src/ ./src/
-COPY setup.py .
-COPY README.md .
-COPY LICENSE .
+# Copy the toolkit code
+COPY . .
 
-# Install the toolkit
-RUN pip install -e .
+# Make the entry point script executable
+RUN chmod +x cct
 
-# Create directories for results and logs
-RUN mkdir -p /app/results /app/logs
-
-# Set up environment variables
-ENV PYTHONPATH=/app
+# Set up environment
+ENV PYTHONPATH="/app:/app/src"
 ENV DISPLAY=:99
 
-# Install Xvfb for headless browser testing
+# Install Xvfb for headless browser support
 RUN apt-get update && apt-get install -y xvfb && rm -rf /var/lib/apt/lists/*
 
-# Create a script to start Xvfb and run the toolkit
-RUN echo '#!/bin/bash\n\
-Xvfb :99 -screen 0 1920x1080x24 &\n\
-exec "$@"' > /entrypoint.sh \
-    && chmod +x /entrypoint.sh
+# Create a startup script that launches Xvfb
+RUN echo '#!/bin/bash\nXvfb :99 -screen 0 1024x768x24 &\nexec "$@"' > /usr/local/bin/start-xvfb.sh \
+    && chmod +x /usr/local/bin/start-xvfb.sh
 
-# Set the entrypoint
-ENTRYPOINT ["/entrypoint.sh"]
+# Create results directory
+RUN mkdir -p /app/results
+
+# Set entrypoint
+ENTRYPOINT ["/usr/local/bin/start-xvfb.sh", "./cct"]
 
 # Default command
-CMD ["python", "-m", "src.cli", "--help"]
-
-# Add labels for container metadata
-LABEL maintainer="geeknik <your.email@example.com>"
-LABEL version="0.1.0"
-LABEL description="Cookie Confusion Toolkit - A tool for testing cookie parsing inconsistencies"
-LABEL repository="https://github.com/geeknik/cookie-confusion-toolkit"
+CMD ["--help"]

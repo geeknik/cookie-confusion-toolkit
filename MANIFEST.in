@@ -1,0 +1,46 @@
+# Include documentation files
+include README.md
+include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+
+# Include configuration files
+include .gitignore
+include .dockerignore
+include Dockerfile
+include docker-compose.yml
+include pyproject.toml
+include setup.py
+
+# Include example files
+recursive-include examples *.py *.json *.yml *.yaml
+recursive-include examples *.md
+
+# Include templates
+recursive-include src/cookie_confusion_toolkit/templates *.html *.md *.jinja2
+
+# Include test files
+recursive-include tests *.py
+include pytest.ini
+
+# Include CI/CD configuration
+recursive-include .github/workflows *.yml
+
+# Exclude compiled files
+global-exclude *.pyc
+global-exclude __pycache__/
+global-exclude .pytest_cache/
+global-exclude .mypy_cache/
+global-exclude .coverage
+
+# Exclude development files
+exclude .pre-commit-config.yaml
+exclude tox.ini
+exclude .editorconfig
+
+# Exclude IDE files
+global-exclude .idea/
+global-exclude .vscode/
+
+# Include scripts
+include cct
