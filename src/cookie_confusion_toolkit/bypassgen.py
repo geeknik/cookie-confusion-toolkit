@@ -873,7 +873,7 @@ class BypassGen:
             "test_results": results,
             "steps": exploit_steps,
             "poc_html": self.generate_html_poc(
-                "delimiter_exploit", cookie_name, cookie_value, trailing_delimiters=";;;"
+                "delimiter_exploit", cookie_name, cookie_value, ";;;"
             ),
         }
 
