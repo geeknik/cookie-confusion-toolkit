@@ -39,7 +39,7 @@ The Cookie Confusion Toolkit helps security professionals identify these issues 
 
 ## 🛡️ Responsible Usage
 
-This toolkit is released under GPLv3 with an additional ethical use clause. By using this software, you agree to:
+This toolkit is released under the MIT license with an additional ethical use clause. By using this software, you agree to:
 
 1. Only test systems you own or have explicit permission to test
 2. Follow responsible disclosure practices when vulnerabilities are found
